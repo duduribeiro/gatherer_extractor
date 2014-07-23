@@ -1,3 +1,5 @@
 require './gatherer_extractor'
 gatherer_extractor = GathererExtractor.new
-p gatherer_extractor.all_sets
+gatherer_extractor.all_sets.each do |set|
+  puts set
+end
