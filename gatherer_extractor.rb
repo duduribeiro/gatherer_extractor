@@ -11,9 +11,19 @@ class GathererExtractor
   end
 
   def all_cards_by_set(set)
-    search_set_url = URI::encode("#{ENDPOINT}Search/Default.aspx?page=0&set=[#{set}]")
-    doc = Nokogiri::HTML( open(search_set_url) )
-    card_nodes = doc.search('span.cardTitle a')
-    card_nodes.map(&:content)
+    page = 0
+    cards = []
+    while true
+      search_set_url = URI::encode("#{ENDPOINT}Search/Default.aspx?page=#{page}&set=[#{set}]")
+      begin
+        doc = Nokogiri::HTML( open(search_set_url) )
+        cards << doc.search('span.cardTitle a').map(&:content)
+        page+=1
+        break if doc.at('a:contains(">")').nil?
+      rescue
+        sleep 1 and retry
+      end
+   end
+    cards.flatten
   end
 end
