@@ -39,4 +39,8 @@ describe GathererExtractor do
      expect(extractor.all_cards_by_set(set)).to include(*expected_cards)
    end
   end
+
+  describe "#extract_card_info" do
+
+  end
 end

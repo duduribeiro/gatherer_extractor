@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'nokogiri'
+require 'pry'
 
 class GathererExtractor
   ENDPOINT = "http://gatherer.wizards.com/Pages/"
@@ -17,19 +18,20 @@ class GathererExtractor
       search_set_url = URI::encode("#{ENDPOINT}Search/Default.aspx?page=#{page}&set=[#{set.name}]")
       begin
         doc = Nokogiri::HTML( open(search_set_url) )
-        cards << doc.search('span.cardTitle a').map(&:content)
+        cards <<  doc.search('span.cardTitle a').map do |node|
+          MagicCard.create(name: node.content, magic_set: set)
+        end
         page+=1
         break if doc.at('a:contains(">")').nil?
       rescue
         sleep 1 and retry
       end
    end
-    cards.flatten.map do |card_text|
-      card = MagicCard.new
-      card.name = card_text
-      card.magic_set = set
-      card.save
-      card
-    end
+   cards.flatten
   end
+
+  def extract_card_info
+    
+  end
+
 end
