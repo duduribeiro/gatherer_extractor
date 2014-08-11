@@ -14,7 +14,7 @@ class GathererExtractor
     page = 0
     cards = []
     while true
-      search_set_url = URI::encode("#{ENDPOINT}Search/Default.aspx?page=#{page}&set=[#{set}]")
+      search_set_url = URI::encode("#{ENDPOINT}Search/Default.aspx?page=#{page}&set=[#{set.name}]")
       begin
         doc = Nokogiri::HTML( open(search_set_url) )
         cards << doc.search('span.cardTitle a').map(&:content)
@@ -24,6 +24,12 @@ class GathererExtractor
         sleep 1 and retry
       end
    end
-    cards.flatten
+    cards.flatten.map do |card_text|
+      card = MagicCard.new
+      card.name = card_text
+      card.magic_set = set
+      card.save
+      card
+    end
   end
 end
