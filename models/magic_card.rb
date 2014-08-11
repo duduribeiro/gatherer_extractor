@@ -3,6 +3,7 @@ class MagicCard
 
   property :id, Serial
   property :name, String
+  property :link, Text
   belongs_to :magic_set
 
   def ==(other)

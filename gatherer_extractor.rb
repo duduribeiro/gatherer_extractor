@@ -19,7 +19,10 @@ class GathererExtractor
       begin
         doc = Nokogiri::HTML( open(search_set_url) )
         cards <<  doc.search('span.cardTitle a').map do |node|
-          MagicCard.create(name: node.content, magic_set: set)
+          extract_card_info(MagicCard.create(name: node.content, 
+                           magic_set: set, 
+                           link: ENDPOINT + node["href"][3..-1] 
+                          ))
         end
         page+=1
         break if doc.at('a:contains(">")').nil?
@@ -30,8 +33,8 @@ class GathererExtractor
    cards.flatten
   end
 
-  def extract_card_info
-    
+  def extract_card_info(card)
+    card
   end
 
 end
