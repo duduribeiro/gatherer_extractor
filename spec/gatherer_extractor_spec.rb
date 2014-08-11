@@ -20,6 +20,8 @@ describe GathererExtractor do
 
   describe "#all_cards_by_set" do
    it "returns all cards by the set" do
+     allow(extractor).to receive(:extract_card_info){|arg| arg }
+
      stub_request(:get, "http://gatherer.wizards.com/Pages/Search/Default.aspx?page=0&set=%5BMagic%202015%20Core%20Set%5D")
       .to_return(body: File.new("#{SUPPORT_PATH}/SearchSetPage0.html"))
      stub_request(:get, "http://gatherer.wizards.com/Pages/Search/Default.aspx?page=1&set=%5BMagic%202015%20Core%20Set%5D")

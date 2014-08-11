@@ -34,6 +34,7 @@ class GathererExtractor
   end
 
   def extract_card_info(card)
+    doc = Nokogiri::HTML( open(card.link) )
     card
   end
 
