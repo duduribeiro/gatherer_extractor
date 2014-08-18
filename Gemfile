@@ -9,5 +9,5 @@ group :test do
   gem 'database_cleaner'
   gem 'rspec'
   gem 'webmock'
-  #gem 'dm-rspec'
+  gem "dm-rspec"
 end
