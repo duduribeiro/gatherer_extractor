@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe GathererExtractor do
-  let!(:extractor) { GathererExtractor.new  }
+  let(:extractor) { GathererExtractor.new  }
   describe "#all_sets" do
     it "returns all sets of gatherer" do
       stub = stub_request(:get, "#{GathererExtractor::ENDPOINT}/Default.aspx")

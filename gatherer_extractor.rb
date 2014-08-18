@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'nokogiri'
+require 'cgi'
 require 'pry'
 
 class GathererExtractor
@@ -19,7 +20,7 @@ class GathererExtractor
       begin
         doc = Nokogiri::HTML( open(search_set_url) )
         cards <<  doc.search('span.cardTitle a').map do |node|
-          extract_card_info(MagicCard.create(name: node.content, 
+          extract_card_info(MagicCard.new(name: node.content, 
                            magic_set: set, 
                            link: ENDPOINT + node["href"][3..-1] 
                           ))
@@ -35,6 +36,9 @@ class GathererExtractor
 
   def extract_card_info(card)
     doc = Nokogiri::HTML( open(card.link) )
+    card.multiverse_id = CGI::parse(URI::parse(card.link).query)["multiverseid"].first
+    card.card_text = doc.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_textRow div.value div.cardtextbox").first.content
+    card.save
     card
   end
 
